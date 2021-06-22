@@ -14,8 +14,9 @@ class Movies extends Component {
     };
 
     render() {
-
+        //rename length to count
         const { length: count } = this.state.movies;
+        //display only text when empty if this.state.movie.length
         if (count === 0)
             return <p>There are no movies in the database.</p>;
 
