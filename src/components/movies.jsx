@@ -8,7 +8,6 @@ class Movies extends Component {
     };
 
     handleDelete = (movie) => {
-
         //filter - keep any movies (m) that doesn't match the movie_id (the movie selected to delete ) 
         const movies = this.state.movies.filter(m => m._id !== movie._id);
         this.setState({ movies })
@@ -17,6 +16,7 @@ class Movies extends Component {
     render() {
         return (
             <table className="table">
+
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -26,7 +26,9 @@ class Movies extends Component {
                         <th></th>
                     </tr>
                 </thead>
+
                 <tbody>
+
                     {this.state.movies.map(movie => (
                         <tr key={movie._id}>
                             <td>{movie.title}</td>
@@ -46,7 +48,9 @@ class Movies extends Component {
                         <td></td>
                         <td></td>
                     </tr>
+
                 </tbody>
+
             </table>
 
         );
