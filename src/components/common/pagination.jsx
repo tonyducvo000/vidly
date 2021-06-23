@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 const Pagination = (props) => {
 
@@ -23,8 +24,16 @@ const Pagination = (props) => {
             </ul>
         </nav>
 
-
     );
 }
+
+
+//type checking for props.  Asserts that props being passed needs to be a number or function.
+Pagination.propTypes = {
+    itemsCount: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    currentPage: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+};
 
 export default Pagination;
