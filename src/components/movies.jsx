@@ -4,7 +4,8 @@ import { getGenres } from '../services/fakeGenreService';
 import Pagination from './common/pagination';
 import ListGroup from './common/listGroup';
 import { paginate } from '../utils/paginate';
-import MoviesTable from './moviesTable'
+import MoviesTable from './moviesTable';
+import _ from 'lodash'
 
 
 class Movies extends Component {
@@ -15,10 +16,14 @@ class Movies extends Component {
         movies: [],
         pageSize: 4,  //# of movies per page
         currentPage: 1,
+        sortColumn: { path: 'title', order: 'asc' }
     };
 
+    //need to pass _id as an empty string, since in listGroup, we're mapping genres to jsx,
+    //this requires the "key" attribute to be set.  
+    //Thus, if we're manually adding a new category, we need to add _id to satisfy this requirement.
     componentDidMount() {
-        const genres = [{ name: 'All Genres' }, ...getGenres()]
+        const genres = [{ _id: "", name: 'All Genres' }, ...getGenres()]
         this.setState({ movies: getMovies(), genres });
     }
 
@@ -45,21 +50,41 @@ class Movies extends Component {
         this.setState({ selectedGenre: genre })
     }
 
+    handleSort = (path) => {
+        const sortColumn = { ...this.state.sortColumn };
+
+        //initially sorts by title name, if the same path is clicked, toggle ascending/descending
+        //else sort by ascending
+        if (sortColumn.path === path) {
+            sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+        }
+        else {
+            sortColumn.path = path;
+            sortColumn.order = "asc";
+        }
+
+        this.setState({ sortColumn });
+
+        //this.setState({ sortColumn: { path, order: 'asc' } })
+    }
+
     render() {
         //rename length to count
         const { length: count } = this.state.movies;
-        const { pageSize, currentPage, selectedGenre, movies: allMovies } = this.state
+        const { pageSize, currentPage, sortColumn, selectedGenre, movies: allMovies } = this.state
         //display only text when empty if this.state.movie.length
         if (count === 0)
             return <p>There are no movies in the database.</p>;
 
 
         //if slectedGenre exists, take allmovies and check it against selected Genre
-        //Need to check seletedGenre and selectedGenre._id, since selectedGenre will always return true.  
+        //Need to check seletedGenre and selectedGenre._id, since selectedGenre will always return true, due to it's truthiness.  
         //If selectedGenre._id is not checked, the .filter function cannot compare id's, thus returning nothing.
         const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
 
-        const movies = paginate(filtered, currentPage, pageSize);
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+        const movies = paginate(sorted, currentPage, pageSize);
 
         return (
 
@@ -79,7 +104,8 @@ class Movies extends Component {
                     <MoviesTable
                         movies={movies}
                         onLike={this.handleLike}
-                        onDelete={this.handleDelete}>
+                        onDelete={this.handleDelete}
+                        onSort={this.handleSort}>
                     </MoviesTable>
 
                     <Pagination
