@@ -15,12 +15,11 @@ class Movies extends Component {
         movies: [],
         pageSize: 4,  //# of movies per page
         currentPage: 1,
-
     };
 
     componentDidMount() {
-
-        this.setState({ movies: getMovies(), genres: getGenres() });
+        const genres = [{ name: 'All Genres' }, ...getGenres()]
+        this.setState({ movies: getMovies(), genres });
 
     }
 
@@ -57,7 +56,11 @@ class Movies extends Component {
         if (count === 0)
             return <p>There are no movies in the database.</p>;
 
-        const filtered = selectedGenre ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
+
+        //if slectedGenre exists, take allmovies and check it against selected Genre
+        //Need to check seletedGenre and selectedGenre._id, since selectedGenre will always return true.  
+        //If selectedGenre._id is not checked, the .filter function cannot compare id's, thus returning nothing.
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
 
         const movies = paginate(filtered, currentPage, pageSize);
 
