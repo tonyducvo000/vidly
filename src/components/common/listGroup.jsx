@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ListGroup = (props) => {
+const ListGroup = ({ items, textProperty, valueProperty, onItemSelect, selectedItem }) => {
     //textProperty passed in as "name" and valueProperty pass in as "_id" via props.  
     //this decouples the component from props, which allows reusability
-    const { items, textProperty, valueProperty, onItemSelect, selectedItem } = props;
+
 
     return (
         <ul className="list-group">
