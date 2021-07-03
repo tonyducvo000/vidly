@@ -4,8 +4,9 @@ import Input from './common/input'
 class LoginForm extends Component {
 
     state = {
-        account: { username: '', password: '' }
-    }
+        account: { username: '', password: '' },
+        errors: {}
+    };
 
     //  creates reference object, this is because 
     //  document.getElementById('username').value should not be used 
@@ -13,14 +14,33 @@ class LoginForm extends Component {
     //username = React.createRef();
 
 
+    validate = () => {
+        const errors = {};
+
+        const { account } = this.state;
+        if (account.username.trim() === '')
+            errors.username = 'Username is required.';
+
+        if (account.password.trim() === '')
+            errors.password = 'Password is required.';
+
+        return Object.keys(errors).length === 0 ? null : errors;
+    };
+
+
     //  e.preventDefault(); this is needed to prevent a full page reload.
     //  bundle.js is not needed to be downloaded
     handleSubmit = e => {
         e.preventDefault();
+        const errors = this.validate();
+        console.log(errors)
+        this.setState({ errors })
+        if (errors) return;
         //const username = this.username.current.value;
-        console.log('Submitted');
 
     };
+
+
 
     handleChange = ({ currentTarget: input }) => {
         const account = { ...this.state.account };
