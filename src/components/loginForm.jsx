@@ -55,6 +55,7 @@ class LoginForm extends Form {
                             className="form-control" />
                     </div> */}
 
+                    {/* third parameter of renderInput is to set password hiding */}
                     {this.renderInput('username', 'Username')}
                     {this.renderInput('password', 'Password', 'password')}
 
