@@ -92,6 +92,7 @@ class Movies extends Component {
                         items={this.state.genres}
                         onItemSelect={this.handleGenreSelect}
                         selectedItem={this.state.selectedGenre}
+
                     ></ListGroup>
                 </div>
 
